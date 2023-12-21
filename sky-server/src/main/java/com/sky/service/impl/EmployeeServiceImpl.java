@@ -1,16 +1,20 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
+import com.sky.result.PageResult;
 import com.sky.service.EmployeeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -109,18 +114,25 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.insert(employee); // 最好不要用save方法，在数据层最好见名知意
 
 
+    }
+    /**
+     *  员工分页查询
+     * @param employeePageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+        // limit 起始索引,每页记录数;
+        // 这里分页查询，直接用插件：PageHelper（页码，每页记录数）
+        PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize());
+        // 这个page是pageHelper插件提供的，本质是arraylist集合
+        Page<Employee> page =  employeeMapper.pageQuery(employeePageQueryDTO);
+        // 在page对象中拿到total记录数和 records 员工的封装集合对象
+        long total = page.getTotal();
+        List<Employee> records = page.getResult();
 
-
-
-
-
-
-
-
-
-
-
-
+        // 将total和records封装到PageResult对象中去
+        return new PageResult(total, records);
     }
 
 }

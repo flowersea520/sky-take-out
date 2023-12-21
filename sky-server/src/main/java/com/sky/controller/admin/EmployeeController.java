@@ -3,8 +3,10 @@ package com.sky.controller.admin;
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
@@ -14,10 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -93,11 +92,26 @@ public class EmployeeController {
         // 输入调用日志信息slf4j；代表这个方法被执行了
         log.info("新增员工：{}", employeeDTO);
 
-        System.out.println("当前线程的id是：" + Thread.currentThread().getId());
+//        System.out.println("当前线程的id是：" + Thread.currentThread().getId());
 
         // controller层调用业务层service
         employeeService.save(employeeDTO);
         return Result.success();
+    }
+
+    /**
+     *  员工分页查询
+     * @param employeePageQueryDTO 分页查询的实体类
+     * @return
+     */
+    @ApiOperation("员工分页查询")
+    @GetMapping("/page")
+    // **请求参数类型为Query，**不是json格式提交，**Query在路径后直接拼接 ?参数
+    // 只要不是JSON，就没必要加@RequestBody注解
+    public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO) {
+        log.info("员工分页查询，参数为：{}",employeePageQueryDTO);
+        PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO); // 查询返回员工PageResult对象
+        return Result.success(pageResult);
     }
 
 
