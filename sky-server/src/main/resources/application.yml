@@ -17,6 +17,7 @@ spring:
 mybatis:
   #mapper配置文件
   mapper-locations: classpath:com/sky/mapper/*.xml
+  # 通过设置type-aliases-package属性，MyBatis会自动扫描指定包下的所有类，并为它们生成类型别名
   type-aliases-package: com.sky.entity
   configuration:
     #开启驼峰命名
@@ -35,6 +36,6 @@ sky:
     # 设置jwt签名加密时使用的秘钥
     admin-secret-key: itcast
     # 设置jwt过期时间；单位毫秒值
-    admin-ttl: 7200000
+    admin-ttl: 72000000
     # 设置前端传递过来的令牌名称
     admin-token-name: token

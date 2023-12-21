@@ -21,6 +21,7 @@ public class Result<T> implements Serializable {
         return result;
     }
 
+//    这个泛型可加可不加（不加，默认Object祖宗类），一般查询类的操作加泛型；
     public static <T> Result<T> success(T object) {
         Result<T> result = new Result<T>();
         result.data = object;
