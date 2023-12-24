@@ -129,7 +129,7 @@ public class EmployeeController {
     }
 
     /**
-     * 根据id查询员工信息
+     * 根据id查询员工信息（前端点击”修改“按钮，会出现数据回显
      * @param id
      * @return
      */
