@@ -15,6 +15,7 @@ import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.result.PageResult;
+import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,5 +162,40 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.update(employee);
 
 	}
+
+	/**
+	 * 根据id查询员工
+	 * @return
+	 */
+	@Override
+	public Employee getById(Long id) {
+		Employee employee = employeeMapper.getById(id);
+		// 注意，这里是要返回给controller层（因为是controller调用，我们不想让前端看到密码，
+		// 所以在这里单独设置成员属性password
+//		 employee = Employee.builder().password("***").build(); 这里使用builder，没有设置的属性，全为空了
+		employee.setPassword("***"); // 所以用这个
+		return employee;
+	}
+
+	/**
+	 * 编辑员工信息
+	 * @param employeeDTO
+	 */
+	@Override
+	public void updateEmpMeg(EmployeeDTO employeeDTO) { // DTO就是单纯为了接收前端的JSON；真正后面都要转换为实体类
+		// 这里使用对象拷贝，将DTO复制到entity中去；（剩余的属性单独设置）
+		Employee employee = new Employee();
+		BeanUtils.copyProperties(employeeDTO, employee);
+
+		employee.setUpdateTime(LocalDateTime.now());
+		employee.setUpdateUser(BaseContext.getCurrentId()); //拿到局部线程的ID
+
+
+		// 这里也可以使用mapper层的update方法，实现xml中sql语句的复用（这也是转换成entity的意义
+		// 因为xml中的paramType中的类型是Employee
+		employeeMapper.updateEmpMeg(employee);
+
+	}
+
 
 }

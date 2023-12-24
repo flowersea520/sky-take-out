@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import org.apache.ibatis.annotations.Insert;
@@ -38,8 +39,23 @@ public interface EmployeeMapper {
 
 
 	/**
+	 * 启用禁用员工账号
 	 *  根据主键，动态修改属性
 	 * @param employee
 	 */
 	void update(Employee employee);
+
+	/**
+	 * 根据id查询员工
+	 * @param id
+	 * @return
+	 */
+	@Select("select id, name, username, password," +
+			" phone, sex, id_number, status, create_time, update_time, create_user, update_user from employee where id = #{id}")
+	Employee getById(Long id);
+
+	/**
+	 * 编辑员工信息
+	 */
+	void updateEmpMeg(Employee employee);
 }
