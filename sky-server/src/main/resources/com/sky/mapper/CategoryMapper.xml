@@ -46,7 +46,7 @@
     <select id="list" resultType="com.sky.entity.Category">
         select * from category
         <where>
-            staus = 1
+            status = 1
         </where>
         <if test="type != null">
             and type = #{type}

@@ -14,16 +14,17 @@ import java.io.ByteArrayInputStream;
 @Slf4j
 public class AliOssUtil {
 
+    // 创建一个工具类，给其赋值
     private String endpoint;
     private String accessKeyId;
     private String accessKeySecret;
     private String bucketName;
 
     /**
-     * 文件上传
+     * 文件上传方法，该方法返回的是一个字符串的URL请求路径；
      *
-     * @param bytes
-     * @param objectName
+     * @param bytes 字节数组；（将前端传过来的文件，转化为字节数组对象）
+     * @param objectName  构造的新文件名称；
      * @return
      */
     public String upload(byte[] bytes, String objectName) {
@@ -51,8 +52,13 @@ public class AliOssUtil {
                 ossClient.shutdown();
             }
         }
-
+/**
+ * StringBuilder 是 Java 中的一个类，它用于构建和操作可变长的字符串。
+ * 与 String 类不同，StringBuilder 允许你直接修改字符串内容，
+ * 而不需要创建新的字符串对象。这对于需要频繁修改字符串内容的场景特别有用，因为它可以显著提高性能。
+ */
         //文件访问路径规则 https://BucketName.Endpoint/ObjectName
+        // 这行代码创建了一个新的StringBuilder对象，并初始化其内容为字符串"https://"。
         StringBuilder stringBuilder = new StringBuilder("https://");
         stringBuilder
                 .append(bucketName)
@@ -60,8 +66,9 @@ public class AliOssUtil {
                 .append(endpoint)
                 .append("/")
                 .append(objectName);
-
-        log.info("文件上传到:{}", stringBuilder.toString());
+//当你使用 StringBuilder 来构建或修改字符串时，
+// 你实际上是在操作一个字符数组。为了得到一个标准的字符串对象，你需要调用 toString() 方法
+        log.info("文件上传到:{}", stringBuilder.toString()); // 输出引用对象的内容
 
         return stringBuilder.toString();
     }

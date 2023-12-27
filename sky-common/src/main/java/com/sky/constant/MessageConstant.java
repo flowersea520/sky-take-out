@@ -2,6 +2,7 @@ package com.sky.constant;
 
 /**
  * 信息提示常量类
+ * 只要是一个字符串提示信息，就可以设置为一个常量类，这样比较优雅；
  */
 public class MessageConstant {
 

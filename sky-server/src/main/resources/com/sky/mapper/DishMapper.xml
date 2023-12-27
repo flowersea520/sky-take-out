@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.DishMapper">
+
+<!--     将实体类中的属性值，赋值给数据库字段属性，即可
+useGeneratedKeys="true":
+当设置为true时，这个属性告诉MyBatis在插入数据后获取数据库生成的键值。这通常用于主键字段，如自动递增的ID。
+keyProperty="id": 这指定了将数据库生成的键值设置到哪个Java对象的属性中。
+在这个例子中，它是设置到Java对象dish的id属性中。（因为这个形参是Dish dish）
+-->
+
+<!--  将insert语句执行完之后，产生的主键值赋值给实体类Dish的id属性；。-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into dish (name, category_id, price, image, description, create_time, update_time, create_user,update_user, status)
+        values (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser}, #{status})
+    </insert>
+</mapper>

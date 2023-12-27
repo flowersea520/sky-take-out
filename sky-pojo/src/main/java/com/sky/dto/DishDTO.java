@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 public class DishDTO implements Serializable {
 
+    // 菜品id
     private Long id;
     //菜品名称
     private String name;
@@ -23,7 +24,7 @@ public class DishDTO implements Serializable {
     private String description;
     //0 停售 1 起售
     private Integer status;
-    //口味
+    //口味； 接口文档显示是一个object[]数组，我们这里定义一个list集合；
     private List<DishFlavor> flavors = new ArrayList<>();
 
 }

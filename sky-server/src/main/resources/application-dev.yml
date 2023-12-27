@@ -6,3 +6,9 @@ sky:
     database: sky_take_out
     username: root
     password: 1234
+  alioss:
+    # 属性值都会通过@ConfigurationProperties注解，注入到Java对象的属性字段中去
+    endpoint: oss-cn-shenzhen.aliyuncs.com
+    access-key-id: LTAI5tDJaooqJidS1oDipneU
+    access-key-secret: AGoJgcaEbkNA5gP1oKAj0POO5zJUVO
+    bucket-name: sky-takeout-lxc

@@ -24,6 +24,8 @@ import java.time.LocalDateTime;
  *  // TODO 注意：这里是用了一个AOP切面增强方法；为公共字段：统一赋值（但是IDEA一直未生效）
  *  // 所以没有注释那个CategoryServiceImpl和EmployeeServiceImpl类中的一些set方法；
  *
+ *如果你没有为mapper接口实现任何接口，Spring可能无法创建代理对象，从而导致AOP不起作用。
+ * 尝试使用@EnableAspectJAutoProxy(proxyTargetClass=true)注解强制使用基于类的代理。
  *
  */
 @Aspect
@@ -94,6 +96,7 @@ public class AutoFillAspect {
         }
         if (operationType == OperationType.UPDATE){
             try {
+                // 给两个字段赋值；
                 Method setUpdateTime = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_TIME, LocalDateTime.class);
                 Method setUpdateUser = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_USER, Long.class);
                 setUpdateTime.invoke(entity,now);

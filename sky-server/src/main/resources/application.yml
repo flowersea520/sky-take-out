@@ -1,13 +1,24 @@
 server:
   port: 8080
 
-# 开启配置文件：dev
+
+# 这是YAML文件的顶级键，表示以下的内容都是Spring Boot的配置信息
 spring:
+  # 电脑上的profile文件指的是配置文件，环境配置的意思；。
+  # 这是关于Spring的profile功能的配置。Spring的profile允许您为应用程序定义不同的环境配置。
+  # 例如，您可能有开发（dev）、测试（test）和生产（prod）三种环境，每种环境可能需要不同的数据库配置或安全设置。
+  # 开启配置文件：dev
   profiles:
+    # active: 指定了当前激活的profile配置环境。在这个例子中，active的值是dev，表示开发环境是当前激活的环境。
     active: dev
+  # 这个部分定义了主应用程序的配置属性。
   main:
+    # 这行允许循环引用。在Spring框架中，循环引用通常是不允许的，
+    # 因为它可能导致运行时异常。但是，通过设置这个属性为true，你可以允许循环引用。
     allow-circular-references: true
+  # 这个部分定义了数据源的配置属性。
   datasource:
+    # 这个部分定义了Druid数据源的配置属性；这是数据库连接池对象
     druid:
       driver-class-name: ${sky.datasource.driver-class-name}
       url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
@@ -39,3 +50,13 @@ sky:
     admin-ttl: 72000000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+  # 设置了@ConfigurationProperties注解，可以将yml配置文件的属性映射到java对象上的属性上了
+  alioss:
+    # 这里使用${属性名} ;  在yml配置文件中，引用属性名（这个对应的属性值在dev-yml中）的方式，获取属性值
+    # ${} 是一个占位符，用于表示从外部源（如环境变量、配置文件等）获取实际的值。
+    endpoint: ${sky.alioss.endpoint}
+    access-key-id: ${sky.alioss.access-key-id}
+    access-key-secret: ${sky.alioss.access-key-secret}
+    # 例：${sky.alioss.bucket-name}：从名为 sky.alioss.bucket-name 的外部源（这里是dev-yml配置文件）
+    # 获取实际的 bucket name 值。
+    bucket-name: ${sky.alioss.bucket-name}
