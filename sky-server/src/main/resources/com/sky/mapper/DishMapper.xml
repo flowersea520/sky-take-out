@@ -15,4 +15,25 @@ keyProperty="id": 这指定了将数据库生成的键值设置到哪个Java对�
         insert into dish (name, category_id, price, image, description, create_time, update_time, create_user,update_user, status)
         values (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser}, #{status})
     </insert>
+
+<!--菜品的分页查询-->
+    <select id="pageQuery" resultType="com.sky.vo.DishVO">
+        <!--  注意看Datagrip控制台，先在控制台上写sql，然后复制到这里-->
+        select d.*, c.name as categoryName from dish d left outer join category c on d.category_id = c.id
+        <where>
+            <if test="name != null">
+                and d.name like concat('%',#{name}, '%')
+            </if>
+            <if test="categoryId != null">
+        <!-- 将传过来的DTO中的CategoryId， #{} 预编译sql：这种语法用于插入或绑定一个变量值到SQL语句中。
+         将实体类DTO中的categoryId插入到sql语句中-->
+                and d.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and d.status = #{status}
+            </if>
+        </where>
+<!-- 根据菜品的创建时间，降序来排，这样可以保证最新创建的数据在最上面 -->
+        order by d.create_time desc
+    </select>
 </mapper>

@@ -1,8 +1,12 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
 import com.sky.annotation.AutoFill;
+import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.enumeration.OperationType;
+import com.sky.vo.DishVO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -29,4 +33,26 @@ public interface DishMapper {
 	 */
 	@AutoFill(value = OperationType.INSERT) // 如果注解没有，拦截不到，自己手动给公共字段赋值（就是增强方法的效果）
 	void insert(Dish dish);
+	/**
+	 * 菜品分页查询
+	 * @param dishPageQueryDTO
+	 *
+	 */
+	Page<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);
+
+	/**
+	 *根据主键id，查询菜品
+	 * @param id
+	 * @return
+	 * #{id}是一个参数占位符，它会被传递给方法的参数值所替换。
+	 */
+	@Select("select * from dish where id = #{id}")
+	Dish getById(Long id);
+
+	/**
+	 *  根据主键删除菜品数据
+	 * @param id
+	 */
+	@Delete("delete from dish where id = #{id}")
+	void deleteById(Long id);
 }
