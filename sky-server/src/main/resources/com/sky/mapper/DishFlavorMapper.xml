@@ -18,5 +18,16 @@
             (#{flavor.dishId},#{flavor.name},#{flavor.value})
         </foreach>
     </insert>
+<!--    根据菜品Id集合批量删除关联口味数据 dish_id就是逻辑外键-->
+    <delete id="deleteByDishIds">
+        delete from dish_flavor where dish_id in 
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+<!--    // 根据菜品id查询口味数据  (会查到多种口味，可以看数据库）-->
+    <select id="getByDishId" resultType="com.sky.entity.DishFlavor">
+        select * from dish_flavor where dish_id = #{dishId}
+    </select>
 </mapper>
 

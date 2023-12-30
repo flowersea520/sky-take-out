@@ -2,6 +2,7 @@ package com.sky.mapper;
 
 import com.github.pagehelper.Page;
 import com.sky.annotation.AutoFill;
+import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.enumeration.OperationType;
@@ -10,6 +11,8 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+import java.util.List;
 
 /**
  * @author mortal
@@ -55,4 +58,18 @@ public interface DishMapper {
 	 */
 	@Delete("delete from dish where id = #{id}")
 	void deleteById(Long id);
+
+	/**
+	 *  根据菜品id集合批量删除菜品数据
+	 * @param ids
+	 */
+	void deleteByIds(List<Long> ids);
+
+	/**
+	 *  修改菜品基本信息和对应口味信息
+	 * @param dish
+	 */
+	// 只要用到  修改和插入的操作，就使用自定义的注解切面，进行公共字段填充
+	@AutoFill(value = OperationType.UPDATE)
+	void update(Dish dish);
 }
