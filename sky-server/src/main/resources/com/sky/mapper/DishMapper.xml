@@ -59,4 +59,29 @@ keyProperty="id": 这指定了将数据库生成的键值设置到哪个Java对�
 <!-- 根据菜品的创建时间，降序来排，这样可以保证最新创建的数据在最上面 -->
         order by d.create_time desc
     </select>
+
+<!--    /**
+	 * 根据分类id查询菜品
+	 * @param dish
+	 * @return
+	 */
+-->
+    <select id="getByCategoryId" resultType="com.sky.entity.Dish">
+        select * from dish
+        <where>
+            <if test="name != null">
+                and name = #{name}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null" >
+                and status = #{status}
+            </if>
+
+        </where>
+        order by create_time desc
+    </select>
+
+
 </mapper>

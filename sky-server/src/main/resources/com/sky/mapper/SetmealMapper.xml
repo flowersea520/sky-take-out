@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.SetmealMapper">
+
+    <!--根据id修改套餐的起售停售-->
+    <update id="update">
+        update setmeal
+        <!-- 由于加了AutoFill自定义的公共字段填充注解，但是公共字段还是要在sql里面注入到sql字段中去#{} -->
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="image != null">
+                image = #{image},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+<!-- 新增套餐-->
+<!--   useGeneratedKeys="true"  用于主键id字段，并将对应的实体类id赋值给数据库的id
+  一旦新记录被插入数据库，MyBatis会自动从数据库中获取新生成的主键并将其设置到相应的属性中。
+  keyProperty="id" 将实体类中的id属性，设置为数据库自动生成的id值
+  -->
+    <insert id="insert" parameterType="setmeal" useGeneratedKeys="true" keyProperty="id">
+        insert into setmeal
+        (category_id, name, price, status, description, image, create_time, update_time, create_user, update_user)
+        values (#{categoryId}, #{name}, #{price}, #{status}, #{description}, #{image}, #{createTime}, #{updateTime},
+                #{createUser}, #{updateUser})
+
+    </insert>
+</mapper>

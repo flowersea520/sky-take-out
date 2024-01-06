@@ -10,6 +10,7 @@ import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 import java.util.List;
@@ -70,6 +71,19 @@ public interface DishMapper {
 	 * @param dish
 	 */
 	// 只要用到  修改和插入的操作，就使用自定义的注解切面，进行公共字段填充
+	// value = Update ， 则给两个字段赋值；
 	@AutoFill(value = OperationType.UPDATE)
 	void update(Dish dish);
+
+
+	/**
+	 * 根据分类id查询菜品
+	 * @param dish
+	 * @return
+	 */
+
+	List<Dish> getByCategoryId(Dish dish);
+
+
+
 }

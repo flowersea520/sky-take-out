@@ -9,10 +9,12 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.Setmeal;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -23,6 +25,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,8 +39,13 @@ public class DishServiceImpl implements DishService {
 	private DishMapper dishMapper;
 	@Autowired
 	private DishFlavorMapper dishFlavorMapper;
+	// 这个setmealDishMapper类也是映射着那个 套餐和菜品的第三张表；
 	@Autowired
 	private SetmealDishMapper setmealDishMapper;
+
+	// 注入setmealmapper，操作setmeal表
+	@Autowired
+	private SetmealMapper setmealMapper;
 
 
 	/**
@@ -196,6 +204,69 @@ public class DishServiceImpl implements DishService {
 			// 向口味表插入n条数据 (前面 修改的操作 没有动用dish_flavor表，现在单独设置）
 			dishFlavorMapper.insertBatch(flavors);
 		}
+
+
+	}
+
+	/**
+	 * 菜品起售、停售
+	 *
+	 * @param status
+	 * @param id
+	 */
+	@Override
+	public void startOrStop(Integer status, Long id) {
+		// 这里构建一个dish对象，里面只要status 和 id（因为修改操作，就用这两个操作）； 根据id，修改status
+		Dish dish = Dish.builder().id(id)
+				.status(status).build();
+
+		// 调用之前定义好的update方法，根据id修改菜品
+		dishMapper.update(dish);
+
+
+		// 注意：一个菜品可以关联多个套餐，一个套餐也可以关联多个菜品；
+		// 如果前端传过来的菜品的status为0停售，那么他关联的套餐也要停售
+		if (status == StatusConstant.DISABLE) {
+			// 如果是停售操作，还需要将包含当前菜品的套餐也停售
+			// 定义一个集合用来存储，前端传过来的id
+			ArrayList<Long> dishIds = new ArrayList<>();
+			dishIds.add(id);
+
+			// 根据第三张表：套餐菜品表，查询传过来的 菜品id是否有对应的套餐id
+			// select setmeal_id from setmeal_dish where dish_id in (?,?,?)
+			List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(dishIds);
+			if (setmealIds != null && setmealIds.size() > 0) {
+				// 套餐集合不为空，说明该菜品id有对应的套餐
+				// 遍历套餐id集合，创建setmeal套餐对象，将套餐id赋值给setmeal套餐对象
+				for (Long setmealId : setmealIds) {
+					// 将套餐id赋值给setmeal套餐对象, 且状态status设置为0.，表示该套餐停售
+					Setmeal setmeal = Setmeal.builder().id(setmealId)
+							.status(StatusConstant.DISABLE)
+							.build();
+					// 调用套餐mapper，操作套餐表；
+					setmealMapper.update(setmeal);
+				}
+			}
+
+
+		}
+
+	}
+
+	/**
+	 * 根据分类id查询菜品
+	 *
+	 * @param categoryId
+	 * @return
+	 */
+	@Override
+	public List<Dish> list(Long categoryId) {
+		// 构建dish对象，将分类id传入进去，然后将起售的状态传入为启用1；
+		Dish dish = Dish.builder().categoryId(categoryId)
+				.status(StatusConstant.ENABLE).build(); // 其他没传的默认为空
+
+		//在service层，将对应的实体类，封装给对应的mapper；(这样可以进行动态sql）
+	  return dishMapper.getByCategoryId(dish);
 
 
 	}
