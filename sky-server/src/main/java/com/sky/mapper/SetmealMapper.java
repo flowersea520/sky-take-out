@@ -6,6 +6,7 @@ import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.enumeration.OperationType;
 import com.sky.vo.SetmealVO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -48,4 +49,18 @@ public interface SetmealMapper {
 	 * @return
 	 */
 	Page<SetmealVO> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
+
+	/**
+	 *  根据id查询套餐
+	 * @param id
+	 */
+	@Select("select * from setmeal where id = #{id}")
+	Setmeal getById(Long id);
+
+	/**
+	 *  通过id删除对应表中的数据
+	 * @param id
+	 */
+	@Delete("delete from setmeal where id = #{setMealId}") // 左边的id是数据库的字段
+	void deleteById(Long setMealId);
 }
