@@ -1,3 +1,4 @@
+# application.yml是全局的默认配置文件，
 server:
   port: 8080
 
@@ -24,6 +25,15 @@ spring:
       url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: ${sky.datasource.username}
       password: ${sky.datasource.password}
+
+  redis:
+#    在这里引用 dev.yml文件的配置项（真正的配置都在那里，我们这里就是引用）
+#    ${} 是一种占位符语法，用于从外部源获取配置值，并将其插入到配置文件中  就是 变量替换。
+    host: ${sky.redis.host}
+    port: ${sky.redis.port}
+    password: ${sky.redis.password}
+#    默认0号数据库，每个数据库数据都是隔离的
+    database: ${sky.redis.database}
 
 mybatis:
   #mapper配置文件

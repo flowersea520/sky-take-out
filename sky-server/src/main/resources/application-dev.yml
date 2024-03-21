@@ -1,3 +1,4 @@
+#application-dev.yml则是针对开发环境的特定配置文件。
 sky:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -12,3 +13,9 @@ sky:
     access-key-id: LTAI5tDJaooqJidS1oDipneU
     access-key-secret: AGoJgcaEbkNA5gP1oKAj0POO5zJUVO
     bucket-name: sky-takeout-lxc
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    #    默认0号数据库，每个数据库数据都是隔离的
+    database: 10

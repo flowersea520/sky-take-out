@@ -85,7 +85,10 @@
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-spring-boot-starter</artifactId>
         </dependency>
-
+<!--Spring 对 Redis 客户端进行了整合，提供了 Spring Data Redis，
+Spring Boot项目中还提供了对应的Starter，即 spring-boot-starter-data-redis。
+这样我们可以直接在 springboot中直接使用 redis
+-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
